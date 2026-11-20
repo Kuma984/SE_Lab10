@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  web:
+    image: kuma984/myaspnetcoreapp:latest
+    build:
+      context: ./src/myaspnetcoreapp
+      dockerfile: Dockerfile
+    container_name: myaspnetcoreappcontainer
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080

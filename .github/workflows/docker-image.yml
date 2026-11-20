@@ -1,0 +1,46 @@
+name: Docker Image CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore SE_Lab10_524K0021_TrinhDucLong/SE_Lab10_524K0021.sln
+
+    - name: Build application
+      run: dotnet build SE_Lab10_524K0021_TrinhDucLong/SE_Lab10_524K0021.sln --configuration Release --no-restore
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      if: github.event_name != 'pull_request'
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./SE_Lab10_524K0021_TrinhDucLong/src/myaspnetcoreapp
+        file: ./SE_Lab10_524K0021_TrinhDucLong/src/myaspnetcoreapp/Dockerfile
+        push: ${{ github.event_name != 'pull_request' && secrets.DOCKER_USERNAME != '' }}
+        tags: |
+          ${{ secrets.DOCKER_USERNAME || 'kuma984' }}/myaspnetcoreapp:latest
+          ${{ secrets.DOCKER_USERNAME || 'kuma984' }}/myaspnetcoreapp:${{ github.sha }}
