@@ -1,54 +1,54 @@
 # Lab 10 - Software Deployment
 
-## Yêu cầu môi trường
-- .NET SDK 8.0
+## Requirements
+- .NET 8.0 SDK
 - Visual Studio 2022
 - Docker Desktop
 
-## Hướng dẫn chạy
+## How to Run
 
-### 1. Chạy Local (Visual Studio)
-- Mở file `SE_Lab10_524K0021.sln`.
-- Nhấn **F5** để build và chạy ứng dụng web.
-- Trình duyệt sẽ tự động mở trang web tại địa chỉ `http://localhost:8080`.
+### 1. Local (Visual Studio)
+1. Open `SE_Lab10_524K0021.sln`.
+2. Press **F5** to build and run the ASP.NET Core MVC application.
+3. The browser will open automatically at `http://localhost:8080`.
 
-Hoặc chạy nhanh bằng dòng lệnh:
+Or run via command line:
 ```bash
 dotnet run --project src/myaspnetcoreapp
 ```
 
 ---
 
-### 2. Chạy bằng Docker Compose (Khuyên dùng)
-Đảm bảo Docker Desktop đang mở trước khi chạy:
+### 2. Docker Compose (Recommended)
+Make sure Docker Desktop is running before executing:
 
 ```bash
-# Khởi động container chạy ngầm
+# Start container in background
 docker compose up -d
 
-# Truy cập trình duyệt tại: http://localhost:8080
+# Open browser at: http://localhost:8080
 
-# Xem log container:
+# View container logs
 docker logs -f myaspnetcoreappcontainer
 
-# Dừng container:
+# Stop container
 docker compose down
 ```
 
 ---
 
-### 3. Chạy bằng lệnh Docker CLI
+### 3. Docker CLI
 ```bash
-# Build image
+# Build Docker image
 docker build -t myaspnetcoreapp:latest .
 
-# Chạy container trên cổng 8080
+# Run container on port 8080
 docker run -d -p 8080:8080 --name myapp myaspnetcoreapp:latest
 
-# Kiểm tra container đang chạy
+# Check running status
 docker ps
 
-# Dừng và xóa container sau khi dùng xong
+# Stop and remove container
 docker stop myapp
 docker rm myapp
 ```
